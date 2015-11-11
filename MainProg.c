@@ -27,6 +27,8 @@ int determine_order(void);
 int getspace( void );
 int open_file(char *fname);
 void print_image(FILE *fptr);
+void implement_user_move(char board[ ], char c);
+void print_board( char board[]);
 
 
 int main( void )
@@ -38,7 +40,7 @@ int main( void )
 	int turn; //Holds 0 if it is the cpu turn, 1 if it is the usr turn
 	int total_moves;	//Keeps an increment of the number of moves of the game
 	char y_or_n; //Holds gameplay status
-	int is_playing;
+	int is_playing = 1;
 	int last_move;
 	
 	//Open the game
@@ -193,8 +195,7 @@ int win_chance(char board[])
 void print_board(int board[]){
 
 
-
-        printf(" %c | %c | %c \n",board[0],board[1],board[2]);
+        printf(" %c | %c | %c \n",board[0],board[1],board[2]);// prints array values to the board
         puts("-----------");
         printf(" %c | %c | %c \n",board[3],board[4],board[5]);
         puts("-----------");
@@ -202,45 +203,27 @@ void print_board(int board[]){
 return;
 }
 
-void implement_user_move(int board[ ]){
-        int bn;
-        scanf("Enter the box you would like to claim %d", &bn);
-        /*check function runs*/
-        board[bn]= 'x';
-}
 
-int determine_order(void){
-        int p1;
+
+char determine_order(void){
         char z;
 
         while(1){
         scanf("%c", &z);
 
 			if(z == 'x' || z == 'X'){
-                printf("You have chosen to play as %c", z);
-                return 1;
+				z = 'X';
+                		printf("You have chosen to play as %c", z);
+        			return z;
 			}else if(z == 'O' || z == 'o'){
-                printf("You have chosen to play as %c", z);
-                return 2;
+				z = 'O';
+                		printf("You have chosen to play as %c", z);
+                		return z;
 			}else{
                 puts("Try again");
-                continue;
+                continue; // Loop ensures user input is valid. Once the user has given valid input, sets and returns z to capital x or o.
 			}
 		}
-}
-
-int getspace( void ){
-        int a;
-        while (1){
-                scanf("%d", &a);
-                        if ( a>9 || a<1){
-                                return a;
-                        }else{
-                                puts("try again");
-                                continue;
-                        }
-                }
-return 0;
 }
 
 int open_file(char *fname)
@@ -265,4 +248,32 @@ void print_image(FILE *fptr){
 	
 	while(fgets(read_string,sizeof(read_string),fptr) != NULL)
 		printf("%s", read_string);
+}
+int getspace( void ){ // makes sure user input is valid
+        int a;
+        while (1){
+                scanf("%d", &a);
+                        if ( a>9 || a<1){
+                                return a;
+                        }else{
+                                puts("try again");
+                                continue;
+                        }
+                }
+return 0;
+}
+
+void implement_user_move(char board[ ], char c){
+        int bn;
+        while(1){
+                bn = getspace();
+                --bn;
+                if (board[bn] != ' '){ // checks that space is available
+                        printf("%d is already claimed, try again.", bn + 1);
+                        continue;
+                }else{
+                        printf("you have claimed %d",bn);
+                        board[bn] = c; //sets space to player's character
+                }
+                }
 }
