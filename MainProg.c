@@ -52,9 +52,14 @@ int main( void )
 	//Initialize variables
 	while(is_playing){
 	winner = 0;
-	cpu_char = 'x';
-	usr_char = 'o';
-	turn = 1; //For now the usr plays first
+	usr_char = determine_order();
+	if(usr_char='X'){
+		turn = 1; //For now the usr plays first
+		cpu_char = 'O';
+	}else{
+		turn = 0;
+		cpu_char= 'X';
+	}
 	for (i=0;i<BOARD_SIZE;i++)
 		board[i] = ' '; //Fill th board with spaces
 	total_moves = 0; //Hey! The game just started so noone has moved yet! 
@@ -264,7 +269,7 @@ return 0;
 }
 
 void implement_user_move(char board[ ], char c){
-        int bn;
+        int bn; //boardspace number
         while(1){
                 bn = getspace();
                 --bn;
